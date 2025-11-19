@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { prisma } from "@/database";
-import { notFound } from "next/navigation";
 import { deleteBlock } from "@/app/api"; // Assuming you will create this action
 import { redirect } from "next/navigation";
 
@@ -16,14 +14,11 @@ async function getBlock(id: string) {
 }
 
 export default async function ShowBlock({ params }: { params: { id: string } }) {
-  const { id } = await params;
-  const block = await prisma.block.findUnique({
-    where: { id: Number(id) },
-  });
-  if (!block) return notFound();
+  const { id } = params;
+  const block = await getBlock(id);
 
   // Create a bind for the delete action to pass the ID
-  const deleteAction = deleteBlock.bind(null, block.id);
+  const deleteAction = deleteBlock.bind(null, Number(block.id));
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-gray-50 min-h-screen">

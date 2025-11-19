@@ -28,7 +28,9 @@ export default async function Home() {
                 key={block.id}
                 className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition"
               >
-                <span className="text-gray-800 font-medium">{block.title}</span>
+                <span className="text-gray-800 font-medium">
+                  <Link href={`/blocks/${block.id}`}>{block.title}</Link>
+                </span>
               </li>
             ))}
           </ul>

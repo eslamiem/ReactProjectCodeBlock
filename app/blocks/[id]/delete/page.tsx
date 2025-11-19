@@ -1,16 +1,13 @@
 import Link from "next/link";
-import { deleteBlock } from "@/app/api"; // Assuming you will create this action
+import { deleteBlock } from "@/app/api"; 
 import { redirect } from "next/navigation";
+import { prisma } from "@/database";
+import { notFound } from "next/navigation";
 
-// Mock function to simulate fetching data. 
-// Replace this with your actual DB call, e.g., prisma.block.findUnique(...)
 async function getBlock(id: string) {
-  // const block = await db.block.findUnique({ where: { id } });
-  return {
-    id: id,
-    title: "Fetch data from php",
-    code: "fetch().json()",
-  };
+  const block = await prisma.block.findUnique({ where: { id: Number(id) } });
+  if (!block) return notFound();
+  return block;
 }
 
 export default async function ShowBlock({ params }: { params: { id: string } }) {

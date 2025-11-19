@@ -1,19 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/database";
 import { notFound } from "next/navigation";
-import { deleteBlock } from "@/app/api"; // Assuming you will create this action
-import { redirect } from "next/navigation";
+import { deleteBlock } from "@/app/api"; 
 
-// Mock function to simulate fetching data. 
-// Replace this with your actual DB call, e.g., prisma.block.findUnique(...)
-async function getBlock(id: string) {
-  // const block = await db.block.findUnique({ where: { id } });
-  return {
-    id: id,
-    title: "Fetch data from php",
-    code: "fetch().json()",
-  };
-}
 
 export default async function ShowBlock({ params }: { params: { id: string } }) {
   const { id } = await params;
@@ -22,12 +11,10 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
   });
   if (!block) return notFound();
 
-  // Create a bind for the delete action to pass the ID
   const deleteAction = deleteBlock.bind(null, block.id);
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-gray-50 min-h-screen">
-      {/* Navigation: Back to Home */}
       <Link 
         href="/" 
         className="text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out inline-block mb-8 text-sm font-medium"
@@ -35,12 +22,10 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
         &larr; Go back Home
       </Link>
 
-      {/* Header: Title and Action Buttons */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Block Details</h1>
         
         <div className="flex gap-3">
-           {/* Edit Button */}
           <Link
             href={`/blocks/${block.id}/edit`}
             className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
@@ -48,7 +33,6 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
             Edit
           </Link>
 
-           {/* Delete Button (Wrapped in Form for Server Action) */}
           <form action={deleteAction}>
             <button
               type="submit"
@@ -60,10 +44,8 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
         </div>
       </div>
 
-      {/* Content Container (Styled like the Form) */}
       <div className="bg-white p-6 rounded-lg shadow-xl space-y-4 border border-gray-200">
         
-        {/* Title Field (Read Only) */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Block Title
@@ -76,7 +58,6 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
           />
         </div>
 
-        {/* Code Field (Read Only) */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Code Snippet

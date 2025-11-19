@@ -9,17 +9,19 @@ export async function createBlock(formData: FormData) {
   redirect("/");
 }
 
-export async function updateBlock(formData: FormData) {
-  const id = formData.get("id") as string;
-  const title = formData.get("title") as string;
+export async function editBlock(id: number, formData: FormData) {
+const title = formData.get("title") as string;
   const code = formData.get("code") as string;
-  
+
   await prisma.block.update({
-    where: { id: parseInt(id) },
-    data: { title, code },
+    where: { id },
+    data: {
+      title,
+      code,
+    },
   });
-  // Redirect to the home page after update
-  redirect("/");
+
+  redirect(`/blocks/${id}`);
 }
 
 export async function deleteBlock(id: number, formData: FormData) {

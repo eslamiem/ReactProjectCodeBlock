@@ -1,27 +1,18 @@
 import Link from "next/link";
-import { editBlock } from "@/app/api"; 
+import { editBlock } from "@/app/api";
 import { prisma } from "@/database";
 import { notFound } from "next/navigation";
 
-async function getBlock(blockId: number) {
-  if (isNaN(blockId)) return null;
-
-  const block = await prisma.block.findUnique({ 
-    where: { 
-      id: blockId 
-    } 
-  });
-  
+async function getBlock(id: number) {
+  if (isNaN(id)) return null;
+  const block = await prisma.block.findUnique({ where: { id } });
   return block;
 }
 
-interface EditPageProps {
-  params: Promise<{ id: string }>;
-}
-
-export default async function EditBlockPage({ params }: EditPageProps) {
-  const { id } = await params;
-  const numericId = Number(id);
+export default async function EditBlockPage({ params }: { params: { id: string } }) {
+  
+  const { id } = await params;   
+  const numericId = parseInt(id);
 
   const block = await getBlock(numericId);
 
@@ -43,10 +34,9 @@ export default async function EditBlockPage({ params }: EditPageProps) {
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Edit Block</h1>
 
       <form action={updateAction} className="bg-white p-6 rounded-lg shadow-xl space-y-4 border border-gray-200">
+        
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-            Block Title
-          </label>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Block Title</label>
           <input 
             id="title"
             name="title"
@@ -58,9 +48,7 @@ export default async function EditBlockPage({ params }: EditPageProps) {
         </div>
 
         <div>
-          <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
-            Code Snippet
-          </label>
+          <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">Code Snippet</label>
           <textarea 
             id="code"
             name="code" 

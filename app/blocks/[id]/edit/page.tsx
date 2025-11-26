@@ -20,11 +20,7 @@ export default async function EditBlockPage({ params }: { params: { id: string }
     return notFound();
   }
   
-  //const updateAction = editBlock.bind(null, block.id);
-
-  const updateAction = async (formData: FormData) => {
-    return await editBlock(Number(block.id), formData);
-  };
+  const updateAction = editBlock.bind(null, block.id);
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-gray-50 min-h-screen">

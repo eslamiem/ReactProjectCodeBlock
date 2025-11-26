@@ -14,10 +14,7 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
   const { id } = params;
   const block = await getBlock(id);
 
-  // Create a wrapper for the delete action to pass the ID and accept FormData
-  const deleteAction = async (formData: FormData) => {
-    return await deleteBlock(Number(block.id), formData);
-  };
+  const deleteAction = deleteBlock.bind(null, block.id);
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-gray-50 min-h-screen">
@@ -41,8 +38,7 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
           >
             Edit
           </Link>
-
-           {/* Delete Button (Wrapped in Form for Server Action) */}
+          {/* Delete Button */}
           <form action={deleteAction}>
             <button
               type="submit"

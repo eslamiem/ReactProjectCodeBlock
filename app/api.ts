@@ -7,7 +7,11 @@ export async function createBlock(formData: FormData) {
   const title = formData.get("title") as string;
   const code = formData.get("code") as string;
   // Create the new block in the database
-  const userId = Number((await cookies()).get("user_id")?.value);
+  const _cookies = (await cookies()) as unknown as any;
+  const userId = Number(_cookies.get("user_id")?.value);
+  if (!userId) {
+    redirect("/login");
+  }
   const block = await prisma.block.create({ data: { title, code, userId } });
   redirect("/");
 }
@@ -42,15 +46,20 @@ export async function handleLogin(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
   try {
-    const foundUser = await prisma.user.findUniqueOrThrow({
+    const foundUser = await prisma.user.findUnique({
       where: { username, password },
     });
     if (!foundUser) {
-      redirect("/login");
+      redirect("/login?error=Invalid Credentials"); // Added generic error param
     } else {
       (await cookies()).set("user_id", String(foundUser.id));
-      redirect("/");
-    } 
+      redirect("/"); 
+    }
   } catch (error: any) {
-    redirect(`/login?error=${error.message}`);  } 
+    if (error.message === "NEXT_REDIRECT") {
+        throw error;
+    }
+    console.error("Login error:", error);
+    redirect("/login?error=Login Failed"); 
+  }
 }

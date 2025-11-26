@@ -12,8 +12,12 @@ export default async function LoginPage({params}: {params: {error?: string }}) {
         <CardTitle className="text-2xl text-center">Login</CardTitle>
       </CardHeader>
       <CardContent>
-        {error && <h1>Something went wrong!!</h1> && <p className="text-red-600 text-center">{error}</p>}
-        
+        {error && (
+                  <div className="space-y-2 mb-4">
+                    <h1 className="text-center text-xl font-bold text-red-700">Something went wrong!</h1>
+                    <p className="text-red-600 text-center">{error}</p>
+                  </div>
+                )}        
         <form className="space-y-4" action={handleLogin}>
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>

@@ -1,8 +1,21 @@
 import { prisma } from "@/database";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
 
 export default async function Home() {
-  const blocks = await prisma.block.findMany();
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("user_id")?.value;
+  console.log("User ID from cookie:", userId);
+  if (!userId) {
+    redirect("/login");
+  }
+  const blocks = await prisma.block.findMany({
+    where: { userId: Number(userId) }  
+  });
+  console.log("Fetched blocks:", blocks)
+  
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">

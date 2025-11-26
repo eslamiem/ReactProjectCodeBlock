@@ -14,8 +14,10 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
   const { id } = params;
   const block = await getBlock(id);
 
-  // Create a bind for the delete action to pass the ID
-  const deleteAction = deleteBlock.bind(null, Number(block.id));
+  // Create a wrapper for the delete action to pass the ID and accept FormData
+  const deleteAction = async (formData: FormData) => {
+    return await deleteBlock(Number(block.id), formData);
+  };
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-gray-50 min-h-screen">

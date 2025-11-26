@@ -11,7 +11,9 @@ export default async function ShowBlock({ params }: { params: { id: string } }) 
   });
   if (!block) return notFound();
 
-  const deleteAction = deleteBlock.bind(null, block.id);
+  const deleteAction = async (formData: FormData) => {
+    return await deleteBlock(Number(block.id), formData);
+  };
 
   return (
     <div className="max-w-xl mx-auto p-8 bg-gray-50 min-h-screen">

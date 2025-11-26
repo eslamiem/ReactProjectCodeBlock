@@ -94,10 +94,9 @@ export async function handleSignup(formData: FormData) {
         });
 
         //Log in the new user and redirect
-        (await cookies()).set("user_id", String(newUser.id));
-        console.log("New user created and logged in:", newUser);
-        redirect("/");
-        
+        console.log("New user created:", newUser);
+        redirect("/login?signupSuccess=true");
+
     } catch (error: any) {
         console.error("Signup error:", error);
         redirect("/signup?error=Registration failed");

@@ -71,3 +71,35 @@ export async function handleLogout() {
   // Redirect the user to the login page
   redirect("/login");
 }
+
+export async function handleSignup(formData: FormData) {
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
+
+    if (!username || !password) {
+        redirect("/signup?error=Missing username or password");
+    }
+
+    try {
+        //Check if user already exists
+        const existingUser = await prisma.user.findUnique({ where: { username } });
+        if (existingUser) {
+            console.log("User already exists");
+            redirect("/signup?error=Username already taken");
+        }
+
+        //Create the new user with plaintext password
+        const newUser = await prisma.user.create({
+            data: { username, password }, // Storing plaintext password
+        });
+
+        //Log in the new user and redirect
+        (await cookies()).set("user_id", String(newUser.id));
+        console.log("New user created and logged in:", newUser);
+        redirect("/");
+        
+    } catch (error: any) {
+        console.error("Signup error:", error);
+        redirect("/signup?error=Registration failed");
+    }
+}

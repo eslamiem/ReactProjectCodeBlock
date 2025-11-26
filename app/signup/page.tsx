@@ -1,31 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter} from "@/components/ui/card";
-import { handleLogin } from "../api";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { handleSignup } from "../api"; 
 import Link from "next/link";
 
-export default async function LoginPage({params}: {params: {error?: string }}) {
-  const error = params.error;
+export default async function SignupPage({ searchParams }: { searchParams: { error?: string } }) {
+  const params = await searchParams;
+  const error = params.error; 
+  
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle className="text-2xl text-center">Login</CardTitle>
+        <CardTitle className="text-2xl text-center">Sign Up</CardTitle>
       </CardHeader>
+      
       <CardContent>
+        {/* Error Display */}
         {error && (
-                  <div className="space-y-2 mb-4">
-                    <h1 className="text-center text-xl font-bold text-red-700">Something went wrong!</h1>
-                    <p className="text-red-600 text-center">{error}</p>
-                  </div>
-                )}        
-        <form className="space-y-4" action={handleLogin}>
+          <div className="mb-4 text-center">
+            <h1 className="font-bold text-red-700">Registration Failed!</h1>
+            <p className="text-red-600">{error}</p>
+          </div>
+        )}
+        
+        <form className="space-y-4" action={handleSignup}>
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
             <Input
               id="username"
               type="text"
-              placeholder="Enter your username"
+              placeholder="Choose a username"
               name="username"
               required
             />
@@ -36,7 +41,7 @@ export default async function LoginPage({params}: {params: {error?: string }}) {
             <Input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="Choose a password"
               name="password"
               required
             />
@@ -46,16 +51,16 @@ export default async function LoginPage({params}: {params: {error?: string }}) {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Login
+            Create Account
           </Button>
         </form>
       </CardContent>
-      {/* Link to Sign-Up Page */}
+
       <CardFooter className="flex justify-center border-t pt-4">
         <p className="text-sm text-gray-500">
-          Don't have an account?{' '}
-          <Link href="/signup" className="text-blue-600 hover:underline font-medium">
-            Sign up
+          Already have an account?{' '}
+          <Link href="/login" className="text-blue-600 hover:underline font-medium">
+            Login here
           </Link>
         </p>
       </CardFooter>

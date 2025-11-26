@@ -2,6 +2,7 @@ import { prisma } from "@/database";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { handleLogout } from "./api";
 
 
 export default async function Home() {
@@ -22,12 +23,26 @@ export default async function Home() {
       <div className="max-w-2xl mx-auto">
         <header className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-semibold text-gray-800">Code Blocks</h1>
-          <Link
-            href="/blocks/create"
-            className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
-          >
-            + Create Block
-          </Link>
+          {/* Added a container for action buttons */}
+          <div className="flex space-x-4">
+            <Link
+              href="/blocks/create"
+              className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+            >
+              + Create Block
+            </Link>
+
+            {/* Logout Form */}
+            <form action={handleLogout}>
+              <button
+                type="submit"
+                className="inline-block px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+              >
+                Logout
+              </button>
+            </form>
+          </div>
+          {/* End of action buttons */}
         </header>
 
         {blocks.length === 0 ? (

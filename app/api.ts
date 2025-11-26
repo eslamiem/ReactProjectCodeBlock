@@ -63,3 +63,11 @@ export async function handleLogin(formData: FormData) {
     redirect("/login?error=Login Failed"); 
   }
 }
+
+export async function handleLogout() {
+  // Delete the 'user_id' cookie
+  (await cookies()).delete("user_id");
+
+  // Redirect the user to the login page
+  redirect("/login");
+}
